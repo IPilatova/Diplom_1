@@ -66,22 +66,17 @@ class TestDatabase:
         fillings = [ing for ing in ingredients if ing.type == INGREDIENT_TYPE_FILLING]
         assert len(fillings) == 3
 
-    @pytest.mark.parametrize(
-        "name, expected_price",
-        [
-            ("hot sauce", 100),
-            ("sour cream", 200),
-            ("chili sauce", 300),
-            ("cutlet", 100),
-            ("dinosaur", 200),
-            ("sausage", 300),
-        ]
-    )
-    def test_ingredient_price_by_name(self, db, name, expected_price):
+    def test_all_ingredient_have_correct_prices(self, db):
         """
-        Проверяет, что цена ингредиента с заданным названием соответствует ожидаемой
+        Проверяет, что цены ингредиентов соответствуют ожидаемым
         """
-        ingredients = db.available_ingredients()
-        for ing in ingredients:
-            if ing.name == name:
-                assert ing.price == expected_price
+        expected_ingredients = {
+            "hot sauce": 100,
+            "sour cream": 200,
+            "chili sauce": 300,
+            "cutlet": 100,
+            "dinosaur": 200,
+            "sausage": 300,
+        }
+        actual_ingredients = {ing.name: ing.price for ing in db.available_ingredients()}
+        assert actual_ingredients == expected_ingredients
